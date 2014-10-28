@@ -82,6 +82,28 @@
         
         it ("step",function() {
         
+                SpriteSheet.map = {
+                        draw: function(ctx, name, x, y) {},
+                        enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 }
+                }
+                
+                
+                var enemies = {
+             
+                        basic: { x: 100, y: -50, sprite: 'enemy_purple', B: 100, C: 2 , E: 100 }
+
+                };
+                
+                enemy = new Enemy(enemies.basic, { x: 200 }) ; 
+                enemy.step(1) ; 
+                
+                //Por ejemplo
+                expect(enemy.B).toEqual(100) ;
+                expect(enemy.C).toEqual(2) ;
+                expect(enemy.E).toEqual(100) ; 
+                expect(enemy.vx).toEqual(90.92974268256818) ;
+                expect(enemy.vy).toEqual(100) ; 
+        
         
         
         
