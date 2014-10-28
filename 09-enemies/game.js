@@ -130,6 +130,8 @@ var PlayerShip = function() {
 
     this.maxVel = 200;
 
+    var presionar = false ; 
+
     this.step = function(dt) {
 	if(Game.keys['left']) { this.vx = -this.maxVel; }
 	else if(Game.keys['right']) { this.vx = this.maxVel; }
@@ -143,9 +145,21 @@ var PlayerShip = function() {
 	}
 
 	this.reload-=dt;
-	if(Game.keys['fire'] && this.reload < 0) {
+    
+
+    var shoot = false ;
+
+
+    if(Game.keys['fire'] && !presionar) {
+        shoot = true ;
+    }else {
+        shoot = false ;
+    }
+
+    presionar = Game.keys['fire'] ;     
+     
+	if(shoot && this.reload < 0) {
 	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
-	    Game.keys['fire'] = false;
 	    this.reload = this.reloadTime;
 
 	    // Se añaden al gameboard 2 misiles 
@@ -153,6 +167,7 @@ var PlayerShip = function() {
 	    this.board.add(new PlayerMissile(this.x+this.w,this.y+this.h/2));
 	}
     }
+
 
     this.draw = function(ctx) {
 	SpriteSheet.draw(ctx,'ship',this.x,this.y,0);
