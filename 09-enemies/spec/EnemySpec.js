@@ -61,3 +61,58 @@
 
 */
 
+        describe("Enemy spec", function() {
+        
+            beforeEach(function(){
+                    loadFixtures("index.html") ; 
+                    canvas = $('#game')[0] ;
+                    expect(canvas).toExist() ; 
+
+                    ctx=canvas.getContext('2d') ; 
+                    expect(ctx).toBeDefined() ;  
+
+                    oldGame = Game ; 
+            });
+
+            afterEach(function() {
+                Game = oldGame ; 
+            });
+        
+        
+        
+        it ("step",function() {
+        
+        
+        
+        
+        
+        }) ; 
+        
+        
+        it ("draw",function() {
+                SpriteSheet.map = {
+                        draw: function(ctx, name, x, y) {},
+                        enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 }
+                }
+                
+                
+                var enemies = {
+             
+                        basic: { x: 100, y: -50, sprite: 'enemy_purple', B: 100, C: 2 , E: 100 }
+
+                };
+                
+                enemy = new Enemy(enemies.basic, { x: 200 }) ; 
+                spyOn(SpriteSheet,"draw") ;
+                enemy.draw(ctx) ; 
+                expect(SpriteSheet.draw).toHaveBeenCalled() ; 
+                //expect(SpriteSheet.draw).toHaveBeenCalledWith(ctx,this.sprite, 0, 990);
+        
+        
+        }) ; 
+        
+        
+        
+        
+        }) ; 
+
