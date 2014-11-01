@@ -2,6 +2,18 @@ describe("FireBallSpec", function () {
 
 
         it("step",function() {
+
+            SpriteSheet.map = {
+                        draw: function(ctx, name, x, y) {},
+                        explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }
+                }
+            
+             fireball = new PlayerFireball(1,100,100) ; 
+             //fireball.step(0.1) ; // t = 1s //FALLA AQUI, ARREGLARLO 
+
+             //expect(fireball.x).toEqual(100) ; 
+
+
         
         
         }) ; 
