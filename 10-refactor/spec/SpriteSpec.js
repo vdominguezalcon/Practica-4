@@ -17,6 +17,17 @@ describe("SpriteSpec",function() {
 
     it("setup",function() {
 
+        var sp = new Sprite () ; 
+        sp.merge= function(props){} ;
+        SpriteSheet.map ={'missilespec': {w:10, h:11}}  ;
+        spyOn(sp,"merge") ; 
+        sp.setup('missilespec','merge') ;
+       // expect(sp.sprite).toHaveBeenCalled();
+        expect(sp.sprite).toBe("missilespec");
+        expect(sp.merge).toHaveBeenCalled();
+       // expect(sp.merge).toEqual(props) ; 
+        expect(sp.w).toEqual(10);
+        expect(sp.h).toEqual(11);
 
 
     }) ;
