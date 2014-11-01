@@ -26,6 +26,19 @@ describe("SpriteSpec",function() {
 
     it ("merge",function(){
 
+        var sp = new Sprite() ; 
+        sp.merge({i:1,j:2,k:3}) ;
+        expect(sp['i']).toEqual(1) ;
+        expect(sp['j']).toEqual(2) ;
+        expect(sp['k']).toEqual(3) ;
+        var sp1 = new Sprite() ; 
+        var num = [1,2,3] ; 
+        sp1.merge(num) ; 
+        expect(sp1[0]).toEqual(1) ;    
+        expect(sp1[1]).toEqual(2) ; 
+        expect(sp1[2]).toEqual(3) ; 
+    
+
 
 
 
