@@ -148,14 +148,14 @@ describe("Collision spec",function() {
             
             var gameBoard = new GameBoard();
 
-            var misil = new PlayerMissile(5,5);
-            misil.x = 5;
-            misil.y = 5;
+            var misil = new PlayerMissile(10,10);
+            misil.x = 10;
+            misil.y = 10;
             misil.damage = 5;
 
             var enemy = new Enemy(enemies.basic);
-            enemy.x = 5;
-            enemy.y = 5;
+            enemy.x = 10;
+            enemy.y = 10;
             enemy.health = 20;
 
             gameBoard.add(misil);
@@ -170,6 +170,67 @@ describe("Collision spec",function() {
             expect(gameBoard.objects.length).toEqual(1);
             expect(enemy.health).toBe(15); //Enemigo vivo
         });
+
+        it("una bola de fuego destruye una  nave ", function(){
+                SpriteSheet.map = {
+                    enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
+                    explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
+                };
+
+                Game = {width: 320, height: 480};
+
+               
+                var gameBoard = new GameBoard();
+
+                var fireball = new PlayerFireball(10, 10);
+                fireball.x = 10 ;
+                fireball.y = 10 ; 
+
+                var enemy = new Enemy(enemies.basic);
+                enemy.x = 10;
+                enemy.y = 10;
+                enemy.health = 20;
+
+                gameBoard.add(fireball);
+                gameBoard.add(enemy);
+                expect(gameBoard.objects.length).toEqual(2);
+                gameBoard.step(0.0001);
+                expect(gameBoard.removed.length).toEqual(1);
+                expect(gameBoard.objects.length).toEqual(2);//fireball + explosion
+                expect(enemy.health).toEqual(-9999999979); //Muerto
+        });
+
+
+        it("la nave enemiga mata a nuestra nave", function(){
+            SpriteSheet.map = {
+                    ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
+                    enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
+                    explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }
+                };
+            Game = {width: 320, height: 480,keys: {'left': false , 'right':false, 'fire': false}};
+
+            var gameBoard = new GameBoard();
+
+            var miNave = new PlayerShip();
+            miNave.x = 10 ;
+            miNave.y = 10 ;
+
+            var enemy = new Enemy(enemies.basic);
+            enemy.x = 10 ;
+            enemy.y = 10 ;             
+
+
+
+            gameBoard.add(miNave); 
+            gameBoard.add(enemy);
+
+
+            expect(gameBoard.objects.length).toEqual(2);
+            gameBoard.step(0.0001);
+           
+            expect(gameBoard.removed.length).toEqual(2);
+            expect(gameBoard.objects.length).toEqual(0);
+});
 
 
 
