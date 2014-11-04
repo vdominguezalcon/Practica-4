@@ -137,5 +137,45 @@ describe("Clase PlayerShip", function(){
 
     });
 
+    it("step con la modificacion del ejercicio 5", function(){
+
+         SpriteSheet.map = {
+            missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 } ,
+            ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 }    
+         }   
+            
+        Game = {width: 320, height: 480, keys: {'fire': true,'left':false,'right':false}};
+        
+        var miNave = new PlayerShip();
+
+
+        var boardDummie = function () { 
+            this.pressed = false;
+            this.add = function () {this.pressed = true}
+        }
+
+        
+        //Al principio no se ha hecho nada asi que estara a true
+        miNave.board = new boardDummie();
+        miNave.step(1);
+        expect(miNave.board.pressed).toBe(true); 
+
+        //La dejamos de pulsar
+        miNave.board = new boardDummie();
+        Game.keys['fire'] = false;
+        miNave.step(1);
+        expect(miNave.board.pressed).toBe(false);
+
+       //La volvemos a pulsar
+        miNave.board = new boardDummie();
+        Game.keys['fire'] = true;
+        miNave.step(1);
+        expect(miNave.board.pressed).toBe(true);
+
+        
+        });
+
+
 });
+
 

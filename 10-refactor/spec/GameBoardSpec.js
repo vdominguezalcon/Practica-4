@@ -56,3 +56,131 @@
     colisionado con objetos de cierto tipo, no con todos los objetos.
 
 */
+
+describe("GameBoard",function() {
+        var gameBoard ; 
+        var canvas,ctx ; 
+        
+        beforeEach(function() {
+                loadFixtures("index.html") ; 
+                
+                canvas = $('#game')[0];
+	        expect(canvas).toExist();
+
+	        ctx = canvas.getContext('2d');
+	        expect(ctx).toBeDefined();
+	        gameBoard = new GameBoard() ;         
+        });
+
+        it("Gameboard.add()",function(){ //Vamos a comprobar que añade obj a objects
+                var obj1= {} ;
+                var obj2=gameBoard.add(obj1) ; //Ahora mismo el objeto 2 seria el objeto 1 obj2 = {}
+                expect(obj2).toBe(obj1) ;
+                
+                var obj3 = 2 ;
+                var obj4= gameBoard.add(obj3); 
+                expect(obj4).toEqual(2) ;  
+                
+               
+        
+        });
+        
+        it("Gameboard.delete()",function(){
+                var obj1 = 2 ;
+                var obj2 = 5 ;
+                var obj3 = 7 ;
+                var obj4 =gameBoard.add(obj1) ;
+                var obj5 =gameBoard.add(obj2) ;
+                var obj6 =gameBoard.add(obj3) ; 
+                gameBoard.resetRemoved() ; //INicializa los objetos para borrarlos 
+                obj4=gameBoard.remove(obj1) ;
+                obj5=gameBoard.remove(obj2) ; 
+                obj6=gameBoard.remove(obj3) ; 
+                expect(gameBoard.removed[0]).toEqual(2) ;
+                expect(gameBoard.removed[1]).toEqual(5) ; 
+                expect(gameBoard.removed[2]).not.toEqual(8) ; 
+                gameBoard.finalizeRemoved() ; //LOs borra
+                   
+        
+        }); 
+        
+        
+        it("GameBoard.iterate()",function(){
+            var doble =  {
+
+                draw: function() {}
+            } ;
+
+            spyOn(doble,"draw") ; 
+            gameBoard.add(doble) ;
+            gameBoard.iterate('draw',ctx) ; 
+            expect(doble.draw).toHaveBeenCalled() ; 
+                   
+        }) ; 
+        
+        
+        it("Gameboard.detect()",function(){
+                gameBoard.objects= [{obj1:"alfredo"},{obj1:"bautista"}] ;
+                
+               
+              
+
+                var unckeck = function() {
+                        return this.obj1 == "pepe" ;
+                };
+
+                expect(gameBoard.detect(unckeck)).toBe(false) ; 
+        
+        
+        
+        }) ; 
+        
+        
+        
+        it ("GameBoard.step()",function() {
+                spyOn(gameBoard,"step") ;
+                gameBoard.step(ctx) ; 
+                waits(200) ;  
+                expect(gameBoard.step).toHaveBeenCalled ; //Para probar que ha sido llamado 
+                
+        
+        
+        
+        }) ; 
+        
+        
+        it("GameBoard.draw()",function(){
+                spyOn(gameBoard,"draw") ; 
+                gameBoard.draw(ctx) ;
+                waits(200) ; //Esperamos un tiempo para que se carge
+                expect(gameBoard.draw).toHaveBeenCalled() ; 
+        
+        
+        }) ; 
+        
+        
+        it("Gameboard.overlap()",function(){
+                var obj1 ={x:0,y:0,w:3,h:3} ;
+                expect(gameBoard.overlap(obj1,obj1)).toBe(true) ;
+                expect(gameBoard.overlap(obj1,{x:1,y:1,w:3,h:3})).toBe(true) ; 
+                expect(gameBoard.overlap(obj1,{x:9,y:9,w:3,h:3})).toBe(false) ; 
+        
+        
+        }); 
+        
+        it("GameBoard.collide()",function() {
+                gameBoard.objects = [{type :1, x:0,y:0,w:3,h:3} ] ;//La vamos a llamar con type
+                var obj1 = {x:12,y:11,w:10,h:9} ;
+                //var obj2 = {x:0,y:0,w:3,h:3} ; 
+                expect(gameBoard.collide(obj1,"1")).toBe(false) ; 
+                //expect(gameBoard.collide(obj2,"1")).toBe(false) ; 
+
+                     
+        
+        
+        }) ; 
+
+
+
+
+});
