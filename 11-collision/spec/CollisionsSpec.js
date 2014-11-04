@@ -84,3 +84,93 @@
     jugador, desaparece también.
 
 */
+
+describe("Collision spec",function() {
+
+    beforeEach(function(){
+                    loadFixtures("index.html") ; 
+                    canvas = $('#game')[0] ;
+                    expect(canvas).toExist() ; 
+
+                    ctx=canvas.getContext('2d') ; 
+                    expect(ctx).toBeDefined() ;  
+
+                    oldGame = Game ; 
+    });
+
+    afterEach(function() {
+        Game = oldGame ; 
+    });
+
+    it("un misil destruye una nave",function() {
+         SpriteSheet.map = {
+                missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 },
+                enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
+                explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
+             };
+            
+            Game = {width: 320, height: 480};
+            
+            var gameBoard = new GameBoard();
+
+            var misil = new PlayerMissile(10,10);
+            misil.x = 10;
+            misil.y = 10;
+            misil.damage = 20;
+
+            var enemy = new Enemy(enemies.basic);
+            enemy.x = 10;
+            enemy.y = 10;
+            enemy.health = 19;
+
+            gameBoard.add(misil);
+            gameBoard.add(enemy);
+
+
+            expect(gameBoard.objects.length).toEqual(2);
+            gameBoard.step(0.0001);
+
+            expect(gameBoard.objects.length).toEqual(1);
+            expect(gameBoard.removed.length).toEqual(2); 
+            expect(gameBoard.objects.length).toEqual(1);
+            expect(enemy.health).toBe(-1); //Enemigo muerto
+
+    }); 
+
+    it ("un misil no destruye una nave",function() {
+            SpriteSheet.map = {
+                missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 },
+                enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
+                explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
+             };
+            
+            Game = {width: 320, height: 480};
+            
+            var gameBoard = new GameBoard();
+
+            var misil = new PlayerMissile(5,5);
+            misil.x = 5;
+            misil.y = 5;
+            misil.damage = 5;
+
+            var enemy = new Enemy(enemies.basic);
+            enemy.x = 5;
+            enemy.y = 5;
+            enemy.health = 20;
+
+            gameBoard.add(misil);
+            gameBoard.add(enemy);
+
+
+            expect(gameBoard.objects.length).toEqual(2);
+            gameBoard.step(0.0001);
+
+            expect(gameBoard.objects.length).toEqual(1);
+            expect(gameBoard.removed.length).toEqual(1); 
+            expect(gameBoard.objects.length).toEqual(1);
+            expect(enemy.health).toBe(15); //Enemigo vivo
+        });
+
+
+
+}); 
