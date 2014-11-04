@@ -322,15 +322,13 @@ Enemy.prototype.step = function(dt) {
 
 
 var PlayerFireball = function(x,y,parabola) {
-        this.w = SpriteSheet.map['explosion'].w;
-        this.h = SpriteSheet.map['explosion'].h;
+        this.setup('explosion',{vy:-1300,parabola:parabola}) ; 
         this.x = x - this.w/2;
-        this.parabola=parabola;
         this.y = y - this.h;
-        this.vy = -1300; //Para que tenga una determinada potencia 
         };
         
-        
+   
+PlayerFireball.prototype = new Sprite();     
         
 PlayerFireball.prototype.step = function(dt) {
         this.vx= 100*this.parabola; // Para que tenga una parabola 
@@ -338,10 +336,6 @@ PlayerFireball.prototype.step = function(dt) {
         this.x += this.vx * dt; //Se mueve en el eje X
         this.vy += 150;
         if(this.y < -this.h) { this.board.remove(this); }
-};
-
-PlayerFireball.prototype.draw = function(ctx) {
-        SpriteSheet.draw(ctx,'explosion',this.x,this.y);
 };
 
 
