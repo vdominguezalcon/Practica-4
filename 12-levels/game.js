@@ -79,6 +79,21 @@ var level1 = [
 ];
 
 
+var level2 = [
+  //  Comienzo, Fin,   Frecuencia,  Tipo,       Override
+    [ 0,        3000,  300,         'step'                 ],
+    [ 6000,     11000, 600,         'ltr'                  ],
+    [ 10000,    13000, 300,         'circle'               ],
+    [ 17800,    19000, 300,         'straight', { x: 50  } ],
+    [ 18200,    20000, 300,         'straight', { x: 90  } ],
+    [ 18200,    20000, 300,         'straight', { x: 10  } ],
+    [ 22000,    24000, 300,         'wiggle',   { x: 150 } ],
+    [ 22000,    24000, 300,         'wiggle',   { x: 100 } ]
+   
+];
+
+
+
 
 var playGame = function() {
     var board = new GameBoard();
@@ -87,8 +102,19 @@ var playGame = function() {
     // Se un nuevo nivel al tablero de juego, pasando la definición de
     // nivel level1 y la función callback a la que llamar si se ha
     // ganado el juego
-    board.add(new Level(level1, winGame));
+    board.add(new Level(level1, nextLevel));
     Game.setBoard(3,board);
+};
+
+
+var playNextLevel = function() {
+    var board = new GameBoard();
+    board.add(new PlayerShip());
+
+ 
+    board.add(new Level(level2, winGame));
+    Game.setBoard(3,board);
+
 };
 
 // Llamada cuando han desaparecido todos los enemigos del nivel sin
@@ -97,6 +123,14 @@ var winGame = function() {
     Game.setBoard(3,new TitleScreen("You win!", 
                                     "Press fire to play again",
                                     playGame));
+};
+
+
+
+var nextLevel = function() {
+    Game.setBoard(3,new TitleScreen("You pass level 1!", 
+                                    "Please, Press fire to play level 2",
+                                    playNextLevel));
 };
 
 
@@ -222,9 +256,9 @@ PlayerShip.prototype.type = OBJECT_PLAYER;
 
 // Llamada cuando una nave enemiga colisiona con la nave del usuario
 PlayerShip.prototype.hit = function(damage) {
-    if(this.board.remove(this)) {
-	loseGame();
-    }
+    this.board.add(new Explosion(this.x + this.w/2, 
+                                     this.y + this.h/2));
+    this.board.remove(this) ;
 };
 
 
@@ -350,11 +384,12 @@ Enemy.prototype.hit = function(damage) {
 
 // Constructor para la explosión
 
-var Explosion = function(centerX,centerY) {
+var Explosion = function(centerX,centerY, isPlayer) {
     this.setup('explosion', { frame: 0 });
     this.x = centerX - this.w/2;
     this.y = centerY - this.h/2;
     this.subFrame = 0;
+    this.isPlayer=isPlayer;
 };
 
 Explosion.prototype = new Sprite();
@@ -363,9 +398,9 @@ Explosion.prototype.step = function(dt) {
     this.frame = Math.floor(this.subFrame++ / 2);
     if(this.subFrame >= 24) {
 	this.board.remove(this);
+	if(this.isPlayer) { loseGame();}
     }
 }
-
 
 
 $(function() {
