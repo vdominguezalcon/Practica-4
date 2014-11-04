@@ -372,7 +372,7 @@ Explosion.prototype.step = function(dt) {
 
 
 var PlayerFireball = function(x,y,parabola) {
-        this.setup('explosion',{vy:-1300,parabola:parabola}) ; 
+        this.setup('explosion',{vy:-1300,parabola:parabola,damage:9999999999}) ; 
         this.x = x - this.w/2;
         this.y = y - this.h;
         };
@@ -385,7 +385,11 @@ PlayerFireball.prototype.step = function(dt) {
         this.y += this.vy * dt; //Se mueve en el eje Y
         this.x += this.vx * dt; //Se mueve en el eje X
         this.vy += 150;
-        if(this.y < -this.h) { this.board.remove(this); }
+        var collision = this.board.collide(this,OBJECT_ENEMY);
+        if (collision) {
+            collision.hit(this.damage);
+        } else if(this.y < -this.h) { this.board.remove(this); } //Parecido al player missile
+        
 };
 
 
