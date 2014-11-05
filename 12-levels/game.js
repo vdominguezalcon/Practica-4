@@ -225,6 +225,10 @@ var PlayerShip = function() {
     this.x = Game.width/2 - this.w / 2;
     this.y = Game.height - 10 - this.h;
 
+    var pressedspace = false ; //NO estan presionadas las teclas en un principio
+    var pressedb = false ; 
+    var pressedn = false 
+
     this.step = function(dt) {
 	if(Game.keys['left']) { this.vx = -this.maxVel; }
 	else if(Game.keys['right']) { this.vx = this.maxVel; }
@@ -238,15 +242,79 @@ var PlayerShip = function() {
 	}
 
 	this.reload-=dt;
-	if(Game.keys['fire'] && this.reload < 0) {
+	this.ShootMissile = function() {
+                
+                var shoot ; 
+
+                if(Game.keys['fire'] && !this.pressedspace) { 
+                        shoot = true  ;
+                }else {
+                        shoot = false ;
+                };
+
+                this.pressedspace = Game.keys['fire'];;
+
+                return shoot;
+        };
+        
+        
+        this.Shootb = function() {
+        
+                var shoot ; 
+                
+                if(Game.keys['fireballb'] && !this.pressedb) { 
+                        shoot = true; 
+                }else{
+                        shoot = false ; 
+                
+                };
+
+
+                this.pressedb =Game.keys['fireballb'];
+
+                return shoot;
+        };
+        
+        
+        this.Shootn = function() {
+
+                var shoot  ; 
+                
+                if(Game.keys['fireballn'] && !this.pressedn) { 
+                        shoot = true;
+                }else {
+                        shoot = false ;  
+                };
+
+                this.pressedn = Game.keys['fireballn'];
+                return shoot;
+        };
+    
+	if(this.ShootMissile() && this.reload < 0) {
 	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
-	    Game.keys['fire'] = false;
 	    this.reload = this.reloadTime;
 
 	    // Se añaden al gameboard 2 misiles 
 	    this.board.add(new PlayerMissile(this.x,this.y+this.h/2));
 	    this.board.add(new PlayerMissile(this.x+this.w,this.y+this.h/2));
 	}
+	
+	 if(this.Shootb() && this.reload < 0) {
+        // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+        this.reload = this.reloadTime;
+
+        // Se añaden al gameboardla bola de fuego 
+        this.board.add(new PlayerFireball(this.x+this.w,this.y+this.h/2,-1.5));
+
+        }
+        
+        if(this.Shootn() && this.reload < 0) {
+        // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+        this.reload = this.reloadTime;
+
+        // Se añaden al gameboard la bola de fuego 
+        this.board.add(new PlayerFireball(this.x+this.w/4,this.y+this.h/2,1.5)); 
+        }
     };
 };
 
@@ -403,6 +471,27 @@ Explosion.prototype.step = function(dt) {
 }
 
 }
+
+var PlayerFireball = function(x,y,parabola) {
+        this.setup('explosion',{vy:-1300,parabola:parabola,damage:9999999999}) ; 
+        this.x = x - this.w/2;
+        this.y = y - this.h;
+        };
+        
+   
+PlayerFireball.prototype = new Sprite();     
+        
+PlayerFireball.prototype.step = function(dt) {
+        this.vx= 100*this.parabola; // Para que tenga una parabola 
+        this.y += this.vy * dt; //Se mueve en el eje Y
+        this.x += this.vx * dt; //Se mueve en el eje X
+        this.vy += 150;
+        var collision = this.board.collide(this,OBJECT_ENEMY);
+        if (collision) {
+            collision.hit(this.damage);
+        } else if(this.y < -this.h) { this.board.remove(this); } //Parecido al player missile
+        
+};
 
 
 $(function() {
