@@ -256,9 +256,12 @@ PlayerShip.prototype.type = OBJECT_PLAYER;
 
 // Llamada cuando una nave enemiga colisiona con la nave del usuario
 PlayerShip.prototype.hit = function(damage) {
-    this.board.add(new Explosion(this.x + this.w/2, 
-                                     this.y + this.h/2));
-    this.board.remove(this) ;
+    if(this.board.remove(this)) {
+        var wait = 1300 ; 
+        this.board.add(new Explosion(this.x + this.w/2,
+        this.y + this.h/2));
+        setTimeout(function(){loseGame()},wait);;
+    }
 };
 
 
@@ -384,12 +387,11 @@ Enemy.prototype.hit = function(damage) {
 
 // Constructor para la explosión
 
-var Explosion = function(centerX,centerY, isPlayer) {
+var Explosion = function(centerX,centerY) {
     this.setup('explosion', { frame: 0 });
     this.x = centerX - this.w/2;
     this.y = centerY - this.h/2;
     this.subFrame = 0;
-    this.isPlayer=isPlayer;
 };
 
 Explosion.prototype = new Sprite();
@@ -397,9 +399,9 @@ Explosion.prototype = new Sprite();
 Explosion.prototype.step = function(dt) {
     this.frame = Math.floor(this.subFrame++ / 2);
     if(this.subFrame >= 24) {
-	this.board.remove(this);
-	if(this.isPlayer) { loseGame();}
-    }
+	    this.board.remove(this);
+}
+
 }
 
 
