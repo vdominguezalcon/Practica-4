@@ -51,3 +51,78 @@
         el nivel ni enemigos en el tablero de juegos.
 
 */
+
+
+
+  describe("Level spec", function() {
+        
+            beforeEach(function(){
+                    loadFixtures("index.html") ; 
+                    canvas = $('#game')[0] ;
+                    expect(canvas).toExist() ; 
+
+                    ctx=canvas.getContext('2d') ; 
+                    expect(ctx).toBeDefined() ;  
+
+                    oldGame = Game ; 
+            });
+
+            afterEach(function() {
+                Game = oldGame ; 
+            });
+
+    it("level.step()",function(){
+
+        SpriteSheet.map = {
+				ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
+				missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 },
+				enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
+				enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
+				enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
+				enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
+				explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }}
+
+
+            var level1 = [
+      //  Comienzo, Fin,   Frecuencia,  Tipo,       Override
+        [ 0,        4000,  500,         'step'                 ],
+        [ 6000,     13000, 800,         'ltr'                  ],
+        [ 10000,    16000, 400,         'circle'               ],
+        [ 17800,    20000, 500,         'straight', { x: 50  } ],
+        [ 18200,    20000, 500,         'straight', { x: 90  } ],
+        [ 18200,    20000, 500,         'straight', { x: 10  } ],
+        [ 22000,    25000, 400,         'wiggle',   { x: 150 } ],
+        [ 22000,    25000, 400,         'wiggle',   { x: 100 } ]
+
+
+    ];
+
+
+        var level = new Level(level1,loseGame) ;
+
+        var gameBoard = new GameBoard() ; 
+        gameBoard.add(level) ; 
+        
+        expect(level.callback).toBe(loseGame) ; 
+        spyOn(level.board,"add") ; 
+        spyOn(level,"callback") ; 
+        level.step(2) ;
+        expect(level.board.add).toHaveBeenCalled() ; 
+        expect(level.t).toBe(2000);
+        expect(level.levelData.length).toBe(8) ; 
+        expect(level.levelData.length).toBe(level1.length) ;
+
+        //Ya ha pasado el tiempo y no hay enemigos 
+        level.t = 25001;
+		level.board.cnt[OBJECT_ENEMY] = 0;
+		level.step(89);
+		expect(level.callback).toHaveBeenCalled();
+
+
+
+
+    }) ; 
+
+
+
+}); 
