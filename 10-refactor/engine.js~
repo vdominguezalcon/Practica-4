@@ -215,6 +215,7 @@ var GameBoard = function() {
 	//}
         _(this.objects).forEach(function(obj){obj[funcName].apply(obj,args)}) ; //Usamos forEach para recorrer todos los objetos, each valía
     };
+
     // Devuelve el primer objeto de objects para el que func es true
     this.detect = function(func) {
 	//for(var i = 0,val=null, len=this.objects.length; i < len; i++) {

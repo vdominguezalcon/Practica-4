@@ -222,14 +222,8 @@ var GameBoard = function() {
 	  //  if(func.call(this.objects[i])) return this.objects[i];
 	//}
 	//return false;
-        var encontrado ; 
-        var find = _(this.objects).find(function(obj){return func.call(obj)})
-        if (!find) {
-            encontrado = false ;
-        }else {
-            encontrado= true
-        }
-            return encontrado ; 
+        
+        return _(this.objects).find(function(obj) { if(func.call(obj)) return obj}) || false;
     };
 
     // Cuando Game.loop() llame a step(), hay que llamar al método
