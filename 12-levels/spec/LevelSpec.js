@@ -153,10 +153,39 @@
 
     }) ; 
 
+    it("Tittle screen informa que hemos perdido tras morir",function() {
+		SpriteSheet.load(sprites,startGame);
+		spyOn(window, "playGame").andCallThrough();
+		spyOn(window, "loseGame").andCallThrough();
+		Game.loop(); 
+		Game.keys['fire'] = false;
+        Game.keys['left'] = false ;
+        Game.keys['right'] = false; //No nos movemos hacia ninguno de los lados aposta para que nos maten
+		waits(200);
 
+		runs(function(){
+			Game.keys['fire'] = true;//pulsamos tecla para empezar
+            Game.keys['left'] = false ;
+            Game.keys['right'] = false; //No nos movemos hacia ninguno de los lados aposta para que nos maten
+			waits(200);
+		});
+
+		runs(function(){
+			expect(window.playGame).toHaveBeenCalled();//nivel 1
+			Game.keys['fire'] = false;
+            Game.keys['left'] = false ;
+            Game.keys['right'] = false; //No nos movemos hacia ninguno de los lados aposta para que nos maten
+			waits(15000);
+		});
+
+				
+		runs(function() {
+			expect(window.loseGame).toHaveBeenCalled();//Ha pasado un tiempo y un enemigo ha colisionado con nosotros
+		});
+
+
+    }); 
   
-
-
 
 
 }); 
