@@ -56,10 +56,10 @@ describe("PlayerMissile",function() {
             }
 
         var pm = new PlayerMissile(1,1000) ;
-        expect(pm.w).toEqual( SpriteSheet.map['missile'].w) ; 
-        expect(pm.h).toEqual( SpriteSheet.map['missile'].h) ;
-        expect(pm.x).toEqual( 1- SpriteSheet.map['missile'].w/2 ) ;
-        expect(pm.y).toEqual( 1000-SpriteSheet.map['missile'].h) ;
+        expect(pm.w).toEqual(2) ; 
+        expect(pm.h).toEqual(10) ;
+        expect(pm.x).toEqual(2) ;
+        expect(pm.y).toEqual(1010) ;
  
     }) ; 
 
@@ -72,8 +72,8 @@ describe("PlayerMissile",function() {
 
              pm.step(1) ; 
             
-             expect(pm.x).toEqual(0) ; 
-             expect(pm.y).toEqual(290) ; 
+             expect(pm.x).toEqual(2) ; 
+             expect(pm.y).toEqual(310) ; 
 
             //Ahora falta probar el remove 
 
@@ -104,7 +104,7 @@ describe("PlayerMissile",function() {
             spyOn(SpriteSheet, "draw");
             pm.draw(ctx) ; 
             expect(SpriteSheet.draw).toHaveBeenCalled();
-            expect(SpriteSheet.draw).toHaveBeenCalledWith(ctx,'missile', pm.x, pm.y); 
+            expect(SpriteSheet.draw).toHaveBeenCalledWith(ctx,'missile', pm.x, pm.y,0); 
             expect(SpriteSheet.draw.calls[0].args[0]).toEqual(ctx);
             expect(SpriteSheet.draw.calls[0].args[0]).not.toEqual("missile");
             expect(SpriteSheet.draw.calls[0].args[1]).toEqual("missile");
