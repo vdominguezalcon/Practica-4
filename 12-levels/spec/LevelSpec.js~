@@ -156,25 +156,25 @@
     it("Tittle screen informa que hemos perdido tras morir",function() {
 		SpriteSheet.load(sprites,startGame);
 		spyOn(window, "playGame").andCallThrough();
-		spyOn(window, "loseGame");
+		spyOn(window, "loseGame").andCallThrough();
 		Game.loop(); 
 		Game.keys['fire'] = false;
-        Game.keys['left'] = false ;
-        Game.keys['right'] = false; //No nos movemos hacia ninguno de los lados aposta para que nos maten
+                Game.keys['left'] = false ;
+                Game.keys['right'] = false; //No nos movemos hacia ninguno de los lados aposta para que nos maten
 		waits(200);
 
 		runs(function(){
 			Game.keys['fire'] = true;//pulsamos tecla para empezar
-            Game.keys['left'] = false ;
-            Game.keys['right'] = false; //No nos movemos hacia ninguno de los lados aposta para que nos maten
+                        Game.keys['left'] = false ;
+                        Game.keys['right'] = false; //No nos movemos hacia ninguno de los lados aposta para que nos maten
 			waits(200);
 		});
 
 		runs(function(){
 			expect(window.playGame).toHaveBeenCalled();//nivel 1
 			Game.keys['fire'] = false;
-            Game.keys['left'] = false ;
-            Game.keys['right'] = false; //No nos movemos hacia ninguno de los lados aposta para que nos maten
+                        Game.keys['left'] = false ;
+                        Game.keys['right'] = false; //No nos movemos hacia ninguno de los lados aposta para que nos maten
 			waits(15000);
 		});
 
@@ -185,7 +185,82 @@
 
 
     }); 
-  
+    
+    
+        it("tras el nivel 1 aparece el 2", function() {
+        
+                SpriteSheet.load(sprites,startGame);
+                spyOn(window, "playGame").andCallThrough();
+                spyOn(window, "winGame").andCallThrough();
+                spyOn(window, "nextLevel").andCallThrough();
+                spyOn(window, "playNextLevel").andCallThrough();
+                Game.loop(); 
+                var level1 = [
+                      //  Comienzo, Fin,   Frecuencia,  Tipo,       Override
+                        [ 0,        4000,  500,         'step'                 ],
+                        [ 6000,     13000, 800,         'ltr'                  ],
+                        [ 10000,    16000, 400,         'circle'               ],
+                        [ 17800,    20000, 500,         'straight', { x: 50  } ],
+                        [ 18200,    20000, 500,         'straight', { x: 90  } ],
+                        [ 18200,    20000, 500,         'straight', { x: 10  } ],
+                        [ 22000,    25000, 400,         'wiggle',   { x: 150 } ],
+                        [ 22000,    25000, 400,         'wiggle',   { x: 100 } ]
+        ];
+
+                var level2 = [
+                  //  Comienzo, Fin,   Frecuencia,  Tipo,       Override
+                    [ 0,        3000,  300,         'step'                 ],
+                    [ 6000,     11000, 600,         'ltr'                  ],
+                    [ 10000,    13000, 300,         'circle'               ],
+                    [ 17800,    19000, 300,         'straight', { x: 50  } ],
+                    [ 18200,    20000, 300,         'straight', { x: 90  } ],
+                    [ 18200,    20000, 300,         'straight', { x: 10  } ],
+                    [ 22000,    24000, 300,         'wiggle',   { x: 150 } ],
+                    [ 22000,    24000, 300,         'wiggle',   { x: 100 } ]
+                   
+        ];
+                Game.keys['right'] = true; //Nos vamos a la derecha para que no nos maten y asi pasemos de nivel 
+                Game.keys['left'] = false ; 
+                Game.keys['fire'] = false;
+                waits(200);
+                
+                runs(function(){
+                        Game.keys['fire'] = true;//pulsamos tecla para empezar
+                        Game.keys['right'] = true;
+                        Game.keys['left'] = false ; 
+                        waits(200);
+                });
+                
+                runs(function(){
+                        expect(window.playGame).toHaveBeenCalled();//nivel 1
+                        Game.keys['fire'] = false;
+                        Game.keys['right'] = true;
+                        Game.keys['left'] = false ; 
+                        expect(window.nextLevel).not.toHaveBeenCalled();//se acaba el primer nivel
+                        waits(25000);
+                });
+                
+                runs(function() {
+                        expect(window.nextLevel).toHaveBeenCalled();//Ya estamos en el siguiente nivel 
+                        waits(200);
+                });
+                runs(function(){
+                        expect(window.winGame).not.toHaveBeenCalled();
+                        Game.keys['fire'] = true;//pulsamos la tecla espacio para empezar el segundo nivel
+                        Game.keys['right'] = true;
+                        Game.keys['left'] = false ; 
+                        waits(200);
+                });
+                runs(function(){
+                        expect(window.playNextLevel).toHaveBeenCalled();//empieza el nivel 2
+                        Game.keys['fire'] = false; //Ya dejamos de pulsar la tecla espacio
+                        waits(level2[level2.length-1][1]+13000);
+                });
+                runs(function() {
+                        expect(window.winGame).toHaveBeenCalled();//pone en la pantalla que hemos ganado 
+                });
+        });
+          
 
 
 }); 
