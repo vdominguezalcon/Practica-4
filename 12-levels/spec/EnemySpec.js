@@ -87,7 +87,11 @@
                         draw: function(ctx, name, x, y) {},
                         enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 }
                 }
-                
+               
+                 var boarddummie = {
+                        remove: function (){},
+                        collide: function(){}
+                 };
                 
                 var enemies = {
              
@@ -95,7 +99,9 @@
 
                 };
                 
-                enemy = new Enemy(enemies.basic, { x: 200 }) ; 
+                enemy = new Enemy(enemies.basic, { x: 200 }) ;
+                
+                enemy.board = boarddummie; 
                 enemy.step(1) ; 
                 
                 //Por ejemplo
