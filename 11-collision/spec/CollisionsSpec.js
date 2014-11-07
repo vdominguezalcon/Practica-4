@@ -117,8 +117,14 @@ describe("Collision spec",function() {
             misil.x = 10;
             misil.y = 10;
             misil.damage = 20;
+            
+            var enemies = {
+             
+                        basic: { x: 100, y: -50, sprite: 'enemy_purple', B: 100, C: 2 , E: 100 }
 
-            var enemy = new Enemy(enemies.basic);
+                };
+
+            var enemy = new Enemy(enemies.basic,{x:200});
             enemy.x = 10;
             enemy.y = 10;
             enemy.health = 19;
@@ -153,7 +159,13 @@ describe("Collision spec",function() {
             misil.y = 10;
             misil.damage = 5;
 
-            var enemy = new Enemy(enemies.basic);
+            var enemies = {
+             
+                        basic: { x: 100, y: -50, sprite: 'enemy_purple', B: 100, C: 2 , E: 100 }
+
+                };
+
+            var enemy = new Enemy(enemies.basic,{x:200});
             enemy.x = 10;
             enemy.y = 10;
             enemy.health = 20;
@@ -186,7 +198,13 @@ describe("Collision spec",function() {
                 fireball.x = 10 ;
                 fireball.y = 10 ; 
 
-                var enemy = new Enemy(enemies.basic);
+                var enemies = {
+             
+                        basic: { x: 100, y: -50, sprite: 'enemy_purple', B: 100, C: 2 , E: 100 }
+
+                };
+
+                var enemy = new Enemy(enemies.basic,{x:200});
                 enemy.x = 10;
                 enemy.y = 10;
                 enemy.health = 20;
@@ -215,7 +233,13 @@ describe("Collision spec",function() {
             miNave.x = 10 ;
             miNave.y = 10 ;
 
-            var enemy = new Enemy(enemies.basic);
+            var enemies = {
+             
+                        basic: { x: 100, y: -50, sprite: 'enemy_purple', B: 100, C: 2 , E: 100 }
+
+                };
+
+            var enemy = new Enemy(enemies.basic,{x:200});
             enemy.x = 10 ;
             enemy.y = 10 ;             
 
